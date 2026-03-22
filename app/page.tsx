@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import emailjs from '@emailjs/browser';
 import Image from 'next/image';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
@@ -1104,28 +1105,47 @@ export default function Home() {
 
             {/* Right: Form */}
             <div className="bg-off/40 border border-ink/[0.04] rounded-2xl p-8 md:p-10">
-              <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); const form = e.currentTarget; form.reset(); setShowConfirmation(true); setTimeout(() => setShowConfirmation(false), 4000); }}>
+              <form className="space-y-5" onSubmit={(e) => {
+                e.preventDefault();
+                const form = e.currentTarget;
+                const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+                btn.disabled = true;
+                btn.textContent = 'Envoi en cours...';
+                emailjs.sendForm('service_w6ga7pq', 'template_s6635wm', form, 'BdD-TIR6kNb9AGh8g')
+                  .then(() => {
+                    form.reset();
+                    setShowConfirmation(true);
+                    setTimeout(() => setShowConfirmation(false), 4000);
+                  })
+                  .catch(() => {
+                    alert('Une erreur est survenue. Veuillez réessayer ou nous contacter par téléphone.');
+                  })
+                  .finally(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Envoyer ma demande <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
+                  });
+              }}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="text-[12px] font-semibold text-ink/60 uppercase tracking-wide mb-1.5 block">Nom <span className="text-sky">*</span></label>
-                    <input type="text" placeholder="Votre nom" required className="w-full px-4 py-3 rounded-xl border border-ink/[0.06] bg-white text-ink text-[14px] placeholder:text-stone/40 focus:outline-none focus:border-sky/40 focus:ring-2 focus:ring-sky/10 transition-all" />
+                    <input type="text" name="from_name" placeholder="Votre nom" required className="w-full px-4 py-3 rounded-xl border border-ink/[0.06] bg-white text-ink text-[14px] placeholder:text-stone/40 focus:outline-none focus:border-sky/40 focus:ring-2 focus:ring-sky/10 transition-all" />
                   </div>
                   <div>
                     <label className="text-[12px] font-semibold text-ink/60 uppercase tracking-wide mb-1.5 block">Email <span className="text-sky">*</span></label>
-                    <input type="email" placeholder="votre@email.fr" required className="w-full px-4 py-3 rounded-xl border border-ink/[0.06] bg-white text-ink text-[14px] placeholder:text-stone/40 focus:outline-none focus:border-sky/40 focus:ring-2 focus:ring-sky/10 transition-all" />
+                    <input type="email" name="reply_to" placeholder="votre@email.fr" required className="w-full px-4 py-3 rounded-xl border border-ink/[0.06] bg-white text-ink text-[14px] placeholder:text-stone/40 focus:outline-none focus:border-sky/40 focus:ring-2 focus:ring-sky/10 transition-all" />
                   </div>
                 </div>
                 <div>
                   <label className="text-[12px] font-semibold text-ink/60 uppercase tracking-wide mb-1.5 block">Entreprise <span className="text-sky">*</span></label>
-                  <input type="text" placeholder="Nom de votre entreprise" required className="w-full px-4 py-3 rounded-xl border border-ink/[0.06] bg-white text-ink text-[14px] placeholder:text-stone/40 focus:outline-none focus:border-sky/40 focus:ring-2 focus:ring-sky/10 transition-all" />
+                  <input type="text" name="company" placeholder="Nom de votre entreprise" required className="w-full px-4 py-3 rounded-xl border border-ink/[0.06] bg-white text-ink text-[14px] placeholder:text-stone/40 focus:outline-none focus:border-sky/40 focus:ring-2 focus:ring-sky/10 transition-all" />
                 </div>
                 <div>
                   <label className="text-[12px] font-semibold text-ink/60 uppercase tracking-wide mb-1.5 block">Téléphone <span className="text-sky">*</span></label>
-                  <input type="tel" placeholder="06 XX XX XX XX" required className="w-full px-4 py-3 rounded-xl border border-ink/[0.06] bg-white text-ink text-[14px] placeholder:text-stone/40 focus:outline-none focus:border-sky/40 focus:ring-2 focus:ring-sky/10 transition-all" />
+                  <input type="tel" name="phone" placeholder="06 XX XX XX XX" required className="w-full px-4 py-3 rounded-xl border border-ink/[0.06] bg-white text-ink text-[14px] placeholder:text-stone/40 focus:outline-none focus:border-sky/40 focus:ring-2 focus:ring-sky/10 transition-all" />
                 </div>
                 <div>
                   <label className="text-[12px] font-semibold text-ink/60 uppercase tracking-wide mb-1.5 block">Message <span className="text-sky">*</span></label>
-                  <textarea rows={4} placeholder="Décrivez votre besoin..." required className="w-full px-4 py-3 rounded-xl border border-ink/[0.06] bg-white text-ink text-[14px] placeholder:text-stone/40 focus:outline-none focus:border-sky/40 focus:ring-2 focus:ring-sky/10 transition-all resize-none" />
+                  <textarea rows={4} name="message" placeholder="Décrivez votre besoin..." required className="w-full px-4 py-3 rounded-xl border border-ink/[0.06] bg-white text-ink text-[14px] placeholder:text-stone/40 focus:outline-none focus:border-sky/40 focus:ring-2 focus:ring-sky/10 transition-all resize-none" />
                 </div>
                 <button type="submit" className="w-full py-3.5 bg-ink text-white font-semibold text-[14px] rounded-xl hover:bg-sky transition-all duration-300 flex items-center justify-center gap-2">
                   Envoyer ma demande
