@@ -1,0 +1,342 @@
+/* ================================================================
+   RESPONSIVE MOBILE & TABLET FIXES — WiDome
+   ================================================================
+   File: styles/responsive-mobile-tablet-fixes.css
+   Desktop is NEVER affected — all rules are inside <=1024px queries.
+   ================================================================ */
+
+
+/* =================================================================
+   MOBILE — max-width: 767px
+   ================================================================= */
+@media (max-width: 767px) {
+
+  /* ────────────────────────────────────────────────────────────────
+     HEADER
+     Reduce padding so header doesn't eat into hero card
+     ────────────────────────────────────────────────────────────── */
+  header {
+    padding: 0.5rem 0.75rem 0 !important;
+  }
+
+  header button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* ────────────────────────────────────────────────────────────────
+     HERO — Section #accueil
+     Reduce outer padding (p-7 = 28px is too much on mobile)
+     ────────────────────────────────────────────────────────────── */
+  #accueil > div {
+    padding: 0.5rem !important;
+  }
+
+  /* Hero badge — reduce tracking to prevent overflow */
+  .hero-ui-element.inline-flex {
+    max-width: 100%;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+    gap: 0.4rem !important;
+  }
+
+  .hero-ui-element.inline-flex span:last-child {
+    letter-spacing: 0.12em !important;
+    font-size: 9px !important;
+  }
+
+  /* Hero CTA — prevent overflow at 320px */
+  #accueil a {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* ────────────────────────────────────────────────────────────────
+     TRUSTED-BY & KEY-FIGURES — Marquee label sections
+     The label "Ils nous font confiance" / "Nos chiffres cles"
+     with pr-10 + 17px text eats most of the width on mobile.
+     ────────────────────────────────────────────────────────────── */
+  #accueil + section,
+  #services + section:not(#realisations) {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  #accueil + section .shrink-0,
+  #services + section:not(#realisations) .shrink-0 {
+    padding-left: 0.5rem !important;
+    padding-right: 0.75rem !important;
+    border-right: none !important;
+  }
+
+  #accueil + section .shrink-0 span,
+  #services + section:not(#realisations) .shrink-0 span {
+    font-size: 11px !important;
+    white-space: normal !important;
+    line-height: 1.2;
+    max-width: 70px;
+  }
+
+  /* ────────────────────────────────────────────────────────────────
+     SERVICES SECTION — #services
+     ────────────────────────────────────────────────────────────── */
+  #services {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+
+  /* Reduce heading bottom spacing */
+  #services > div.container-business:first-of-type,
+  #services > .container-business.pb-16 {
+    padding-bottom: 1.5rem !important;
+  }
+
+  /* Section headings — reduce from text-4xl */
+  .container-business h2 {
+    font-size: 1.75rem !important;
+    line-height: 1.05 !important;
+  }
+
+  /* ── SERVICE ACCORDION ──
+     CRITICAL: 4 panels in horizontal flex at ~80px each = unusable.
+     Stack vertically. JS flex-[4] vs flex-[0.5] still distributes
+     space, giving 73% to active and 9% to each collapsed panel.
+     ────────────────────────────────────────────────────────────── */
+  #services > div:last-child > div {
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 750px !important;
+    gap: 0.35rem !important;
+  }
+
+  /* Each panel: ensure minimum height for collapsed state */
+  #services > div:last-child > div > div {
+    min-height: 55px !important;
+  }
+
+  /* ── Collapsed panels: un-rotate the vertical "-rotate-90" tag ──
+     In Tailwind, the class is "-rotate-90" which in CSS needs
+     escaping. Use attribute selector for reliability. */
+  #services > div:last-child > div > div span[class*="rotate"] {
+    transform: none !important;
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    font-size: 14px !important;
+    letter-spacing: 0.05em !important;
+  }
+
+  /* ── Active panel expanded content: breathing room at top ──
+     Content uses justify-end (pushed to bottom). On mobile the
+     panel is taller, so add padding-top to avoid badge touching
+     the top edge when content overflows. */
+  #services > div:last-child > div > div > div:last-child {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.25rem !important;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+
+  /* ────────────────────────────────────────────────────────────────
+     CARROUSEL CHANTIERS (section after key-figures)
+     Gradient overlays w-40 = 160px eat 50% of 320px screen.
+     ────────────────────────────────────────────────────────────── */
+  #services + section + section > div.absolute {
+    width: 1.5rem !important;
+  }
+
+  /* Image cards — reduce width for better visual */
+  #services + section + section .shrink-0 {
+    width: 220px !important;
+    height: 140px !important;
+  }
+
+  #services + section + section {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  /* ────────────────────────────────────────────────────────────────
+     CASE STUDIES — #realisations (Orbit layout)
+     CRITICAL: Left 50% decorative orb + right 55% content.
+     On 390px iPhone: content area = 215px. Text is cut off.
+     Fix: hide orb completely, make content full-width.
+     ────────────────────────────────────────────────────────────── */
+  #realisations {
+    padding-top: 3rem !important;
+  }
+
+  #realisations .container-business {
+    padding-bottom: 1.5rem !important;
+  }
+
+  /* Hide decorative gradient orb */
+  .project-orbit-pinned > div:first-child {
+    display: none !important;
+  }
+
+  /* Make content area full-width */
+  .project-orbit-pinned > div:last-child {
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+
+  /* Also override the per-slide padding */
+  .project-slide {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Reduce project image height */
+  .project-slide > div:first-child {
+    height: 200px !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Project title — prevent text cutoff */
+  .project-slide h3 {
+    font-size: 1.375rem !important;
+    word-break: break-word !important;
+  }
+
+  /* Reduce orbit pinned section height for mobile */
+  .project-orbit-pinned {
+    min-height: 85vh !important;
+  }
+
+  /* ────────────────────────────────────────────────────────────────
+     AVANT / APRÈS — Section after #realisations
+     The before/after image is barely visible — bottom bar overlaps.
+     CTA "Demander un audit" overflows right edge.
+     ────────────────────────────────────────────────────────────── */
+  #realisations + section {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+
+  /* Bottom bar — stack text and CTA vertically */
+  #realisations + section .absolute.bottom-0 {
+    position: relative !important;
+    padding: 1rem !important;
+  }
+
+  #realisations + section .absolute.bottom-0 > div {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.75rem !important;
+  }
+
+  #realisations + section .absolute.bottom-0 a {
+    margin-left: 0 !important;
+    font-size: 13px !important;
+  }
+
+  /* Avant/Après labels — smaller on mobile */
+  #realisations + section .absolute.top-0 span {
+    font-size: 1rem !important;
+  }
+
+  /* Reduce the top banner height slightly */
+  #realisations + section .absolute.top-0 {
+    height: 18% !important;
+  }
+
+  /* ────────────────────────────────────────────────────────────────
+     CONTACT — #contact
+     ────────────────────────────────────────────────────────────── */
+  #contact {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+
+  #contact .container-business > .grid {
+    gap: 2rem !important;
+  }
+
+  /* ────────────────────────────────────────────────────────────────
+     FOOTER
+     ────────────────────────────────────────────────────────────── */
+  footer {
+    padding: 0.5rem !important;
+    padding-top: 0 !important;
+  }
+
+  footer .max-w-6xl {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Links row — reduce gap */
+  footer .py-10 {
+    gap: 1.25rem 0.75rem !important;
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+
+  /* Stack footer contact info vertically */
+  footer .py-10 > .flex.items-center.gap-6 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem !important;
+  }
+
+  /* Increase footer social icon touch targets */
+  footer .w-9.h-9 {
+    width: 2.75rem !important;
+    height: 2.75rem !important;
+  }
+
+  /* Footer top section spacing */
+  footer .pb-10 {
+    padding-bottom: 1.5rem !important;
+  }
+}
+
+
+/* =================================================================
+   TABLET — min-width: 768px AND max-width: 1024px
+   ================================================================= */
+@media (min-width: 768px) and (max-width: 1024px) {
+
+  /* ── SERVICE ACCORDION ── */
+  #services > div:last-child > div {
+    height: 480px !important;
+  }
+
+  /* ── CASE STUDIES — Orbit ── */
+  .project-orbit-pinned > div:first-child {
+    width: 30% !important;
+  }
+
+  .project-orbit-pinned > div:last-child {
+    width: 70% !important;
+  }
+
+  /* ── AVANT / APRES bottom bar ── */
+  #realisations + section .absolute.bottom-0 a {
+    margin-left: 1rem !important;
+  }
+
+  /* ── CONTACT ── */
+  #contact .container-business > .grid {
+    gap: 2.5rem !important;
+  }
+
+  /* ── SECTION SPACING ── */
+  #services {
+    padding-top: 5rem !important;
+    padding-bottom: 4rem !important;
+  }
+
+  #contact {
+    padding-top: 5rem !important;
+    padding-bottom: 4rem !important;
+  }
+
+  /* ── CARROUSEL CHANTIERS overlays ── */
+  #services + section + section > div.absolute {
+    width: 4rem !important;
+  }
+}
